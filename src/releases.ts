@@ -93,12 +93,14 @@ async function release_pages(): Promise<ReleasePage[] | undefined> {
 				try {
 					return resolve( await JSON.parse( body ) )
 				} catch ( error ) {
+					console.log( error.message )
 					console.error( error.message )
 					return resolve( undefined )
 				}
 			} )
 
 		} ).on( "error", ( error ) => {
+			console.log( error.message )
 			console.error( error.message )
 			return resolve( undefined )
 		} )
