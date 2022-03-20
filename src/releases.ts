@@ -28,6 +28,11 @@ export async function get( version: string ): Promise<Release | undefined> {
 		console.log( `Comparing against ${json.length} releases ...` )
 
 		const match = platform_name()
+		console.log( `Matching against ${match} ...` )
+
+		let plat:string = os.platform()
+		let tag_end:string = ""
+		if ( plat == 'win32' ) tag_end = "win32"
 
 		for ( let releasePageIndex = 0; releasePageIndex < json.length; releasePageIndex++ ) {
 			const release = json[releasePageIndex]
@@ -36,7 +41,7 @@ export async function get( version: string ): Promise<Release | undefined> {
 				const asset = release.assets[releaseIndex]
 
 				// Is this a match for what we want?
-				if ( asset.name.startsWith( match ) ) {
+				if ( asset.name.startsWith( match ) && (tag_end.length == 0 || release.tag_name.endsWith(tag_end) ) {
 
 					// Extract archive format
 					archiveFormat = knownArchiveFormats[0]

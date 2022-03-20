@@ -67,7 +67,7 @@ function get(version) {
         var _this = this;
         return __generator(this, function (_a) {
             return [2 /*return*/, new Promise(function (resolve, _reject) { return __awaiter(_this, void 0, void 0, function () {
-                    var json, retry, match, releasePageIndex, release, releaseIndex, asset, formatIndex, format;
+                    var json, retry, match, plat, tag_end, releasePageIndex, release, releaseIndex, asset, formatIndex, format;
                     return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0:
@@ -99,12 +99,17 @@ function get(version) {
                                     return [2 /*return*/, resolve(undefined)];
                                 console.log("Comparing against " + json.length + " releases ...");
                                 match = platform_name();
+                                console.log("Matching against " + match + " ...");
+                                plat = os.platform();
+                                tag_end = "";
+                                if (plat == 'win32')
+                                    tag_end = "win32";
                                 for (releasePageIndex = 0; releasePageIndex < json.length; releasePageIndex++) {
                                     release = json[releasePageIndex];
                                     for (releaseIndex = 0; releaseIndex < release.assets.length; releaseIndex++) {
                                         asset = release.assets[releaseIndex];
                                         // Is this a match for what we want?
-                                        if (asset.name.startsWith(match)) {
+                                        if (asset.name.startsWith(match) && (tag_end.length == 0 || release.tag_name.endsWith(tag_end))) {
                                             // Extract archive format
                                             exports.archiveFormat = knownArchiveFormats[0];
                                             for (formatIndex = 0; formatIndex < knownArchiveFormats.length; formatIndex++) {
@@ -165,6 +170,7 @@ function release_pages() {
                                     case 1: return [2 /*return*/, _a.apply(void 0, [_b.sent()])];
                                     case 2:
                                         error_1 = _b.sent();
+                                        console.log(error_1.message);
                                         console.error(error_1.message);
                                         return [2 /*return*/, resolve(undefined)];
                                     case 3: return [2 /*return*/];
@@ -172,6 +178,7 @@ function release_pages() {
                             });
                         }); });
                     }).on("error", function (error) {
+                        console.log(error.message);
                         console.error(error.message);
                         return resolve(undefined);
                     });
